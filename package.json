@@ -8,5 +8,6 @@
   },
   "license": "ISC",
   "dependencies": {
+    "node-twitter-api": "^1.7.1"
   }
 }
