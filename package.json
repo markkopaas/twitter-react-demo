@@ -8,6 +8,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "cookie-session": "^2.0.0-alpha.1",
     "node-twitter-api": "^1.7.1"
   }
 }

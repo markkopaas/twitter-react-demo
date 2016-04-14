@@ -10,17 +10,16 @@ module.exports = function (config) {
         consumerSecret: config.twitter.consumerSecret,
         callback: config.twitter.callbackUrl
     });
-    //TODO: this needs to go to cookie encrypted
-    var _requestSecret;
     var router  = express.Router();
 
-    router.get("/request-token",
+    router.get('/request-token',
         function (req, res) {
             twitter.getRequestToken(function (err, requestToken, requestSecret) {
-                if (err)
+                if (err) {
+                    req.session = null;
                     res.status(500).send(err);
-                else {
-                    _requestSecret = requestSecret;
+                } else {
+                    req.session.requestSecret = requestSecret;
                     res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
                 }
             });
@@ -29,19 +28,21 @@ module.exports = function (config) {
 
     router.get("/access-token",
         function (req, res) {
-            var requestToken = req.query.oauth_token;
-            var verifier     = req.query.oauth_verifier;
+            var requestToken  = req.query.oauth_token;
+            var verifier      = req.query.oauth_verifier;
+            var requestSecret = req.session.requestSecret;
 
-            twitter.getAccessToken(requestToken, _requestSecret, verifier, function (err, accessToken, accessSecret) {
-                if (err)
+            delete req.session.requestSecret;
+
+            twitter.getAccessToken(requestToken, requestSecret, verifier, function (err, accessToken, accessSecret) {
+                if (err) {
+                    req.session = null;
                     res.status(500).send(err);
-                else
-                    twitter.verifyCredentials(accessToken, accessSecret, function (err, user) {
-                        if (err)
-                            res.status(500).send(err);
-                        else
-                            res.send(user);
-                    });
+                } else {
+                    req.session.authenticated = true;
+                    req.session.twitterToken  = {accessToken: accessToken, accessSecret: accessSecret};
+                    res.redirect(config.afterAuthUrl);
+                }
             });
         }
     );

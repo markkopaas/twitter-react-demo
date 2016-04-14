@@ -3,8 +3,9 @@ var host = 'http://127.0.0.1';
 
 module.exports = {
     port: port,
+    cookieEncryptionKey: process.env.COOKIE_ENCRYPTION_KEY,
     auth: {
-        sessionSecret: process.env.SESSION_SECRET,
+        afterAuthUrl: host + ':' + port + '/',
         twitter: {
             consumerKey: process.env.TWITTER_CONSUMER_KEY,
             consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
