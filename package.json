@@ -4,11 +4,29 @@
   "description": "",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "watchify app-render-in-browser.js -o public/js/bundle.js -v",
+    "browserify": "browserify app-render-in-browser.js | uglifyjs > public/js/bundle.js",
+    "build": "npm run browserify ",
+    "start": "npm run watch & nodemon server.js"
   },
   "license": "ISC",
   "dependencies": {
     "cookie-session": "^2.0.0-alpha.1",
-    "node-twitter-api": "^1.7.1"
+    "express": "^4.13.4",
+    "node-jsx": "^0.13.3",
+    "node-twitter-api": "^1.7.1",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "reactify": "^1.1.1",
+    "uglify-js": "^2.6.2",
+    "watchify": "^3.7.0"
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
   }
 }

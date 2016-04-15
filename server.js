@@ -1,12 +1,10 @@
-// Require our dependencies
-var express = require('express');
-var http    = require('http');
+var express       = require('express');
+var http          = require('http');
 var cookieSession = require('cookie-session');
 
 var config = require('./config');
 var auth   = require('./auth/auth.js')(config.auth);
 
-// Create an express instance and set a port variable
 var app = express();
 
 // Disable etag headers on responses
@@ -23,7 +21,8 @@ app.use(auth.router);
 // No authentication, could be potentially in a different server
 app.use("/", express.static(__dirname + "/public/"));
 
-// Mount API, require authentication with error
+// Mount API
+// Require authentication - if missing, respond with error
 app.use('/api', [
     auth.onUnauthenticatedReturnError,
     function(req, res, next) {
@@ -31,13 +30,11 @@ app.use('/api', [
     }
 ]);
 
-// Mount server side rendering
-// if not authenticated, redirect
+// Mount server side rendered app
+// Require authentication - if missing, then redirect to login
 app.use('/', [
     auth.onUnauthenticatedRedirectToLogin,
-    function(req, res, next) {
-        res.send('rendered ');
-    }
+    require('./app-render-in-server')
 ]);
 
 var server = http.createServer(app).listen(config.port, function () {
