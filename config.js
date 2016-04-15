@@ -5,7 +5,9 @@ module.exports = {
     port: port,
     cookieEncryptionKey: process.env.COOKIE_ENCRYPTION_KEY,
     auth: {
-        afterAuthUrl: host + ':' + port + '/',
+        requestTokenPath: '/auth/request-token',
+        accessTokenPath: '/auth/access-token',
+        afterAuthPath: '/',
         twitter: {
             consumerKey: process.env.TWITTER_CONSUMER_KEY,
             consumerSecret: process.env.TWITTER_CONSUMER_SECRET,

@@ -10,9 +10,26 @@ module.exports = function (config) {
         consumerSecret: config.twitter.consumerSecret,
         callback: config.twitter.callbackUrl
     });
-    var router  = express.Router();
 
-    router.get('/request-token',
+    var onUnauthenticatedRedirectToLogin = function (req, res, next) {
+        if (!req.session.authenticated) {
+            res.redirect(config.requestTokenPath);
+            return;
+        }
+        next();
+    };
+
+    var onUnauthenticatedReturnError = function (req, res, next) {
+        if (!req.session.authenticated) {
+            res.sendStatus(401);
+            return;
+        }
+        next();
+    };
+
+    var router = express.Router();
+
+    router.get(config.requestTokenPath,
         function (req, res) {
             twitter.getRequestToken(function (err, requestToken, requestSecret) {
                 if (err) {
@@ -26,7 +43,7 @@ module.exports = function (config) {
         }
     );
 
-    router.get("/access-token",
+    router.get(config.accessTokenPath,
         function (req, res) {
             var requestToken  = req.query.oauth_token;
             var verifier      = req.query.oauth_verifier;
@@ -41,13 +58,15 @@ module.exports = function (config) {
                 } else {
                     req.session.authenticated = true;
                     req.session.twitterToken  = {accessToken: accessToken, accessSecret: accessSecret};
-                    res.redirect(config.afterAuthUrl);
+                    res.redirect(config.afterAuthPath);
                 }
             });
         }
     );
-
-    return router;
+    
+    return {
+        router: router,
+        onUnauthenticatedRedirectToLogin: onUnauthenticatedRedirectToLogin,
+        onUnauthenticatedReturnError: onUnauthenticatedReturnError
+    };
 }
-
-
