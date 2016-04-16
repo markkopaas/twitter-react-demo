@@ -4,8 +4,8 @@
   "description": "",
   "main": "",
   "scripts": {
-    "watch": "watchify app-render-in-browser.js -o public/js/bundle.js -v",
-    "browserify": "browserify app-render-in-browser.js | uglifyjs > public/js/bundle.js",
+    "watch": "watchify app/bundle-entry.js -o public/js/bundle.js -v",
+    "browserify": "browserify app/bundle-entry.js | uglifyjs > public/js/bundle.js",
     "test": "mocha --recursive -R min",
     "test-watch": "mocha -w --recursive -R min",
     "build": "npm run browserify ",
@@ -17,6 +17,7 @@
     "express": "^4.13.4",
     "node-jsx": "^0.13.3",
     "node-twitter-api": "^1.7.1",
+    "q": "^1.4.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
     "reflux": "^0.4.1"

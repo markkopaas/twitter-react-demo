@@ -1,6 +1,6 @@
 var express       = require('express');
 var cookieSession = require('cookie-session');
-var authFactory   = require('./auth/auth-factory.js');
+var authFactory   = require('../lib/auth/auth-factory.js');
 
 module.exports = {create: create};
 
@@ -20,7 +20,7 @@ function create(config) {
 
 // Mount static content dir. 
 // No authentication, could be potentially in a different server
-    app.use("/", express.static(__dirname + "/public/"));
+    app.use("/", express.static(__dirname + "/../public/"));
 
 // Mount API
 // Require authentication - if missing, respond with error
@@ -35,7 +35,7 @@ function create(config) {
 // Require authentication - if missing, then redirect to login
     app.use('/', [
         auth.onUnauthenticatedRedirectToLogin,
-        require('./app-render-in-server')
+        require('./server-side-render')
     ]);
     
     return app;

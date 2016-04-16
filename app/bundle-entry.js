@@ -8,5 +8,5 @@ var App = React.createFactory(require('./components/App.react.jsx'));
 // Over-render the static html component, using the same props that were used for rendering in server
 ReactDOM.render(App({initialAppState: window.INITIAL_APP_STATE}), document.getElementById('react-app'));
 
-// Populate the stores from initial state
+// Populate the stores from the initial state
 appActions.init(window.INITIAL_APP_STATE);

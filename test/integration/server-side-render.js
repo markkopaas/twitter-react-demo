@@ -2,8 +2,8 @@ require('./../lib/spec-helper.js');
 
 var test = require('supertest-as-promised');
 
-var testAppFactory = require('../../express-app-factory')
-var authFactory    = require('../../auth/auth-factory.js');
+var testAppFactory = require('../../express-app/express-app-factory')
+var authFactory    = require('../../lib/auth/auth-factory.js');
 
 var authByPassStub = require('../lib/stubs/auth-bypass.stub')
 
