@@ -2,28 +2,21 @@ require('node-jsx').install({extension: '.jsx'});
 
 var ReactDOMServer = require('react-dom/server');
 var React          = require('react');
-var q              = require('q');
 
-var App = React.createFactory(require('../app/components/App.react'));
+var App                   = require('../app/components/App.react');
+var twitterAdapterFactory = require('./../lib/twitter-adapter-factory');
 
 module.exports = function (req, res, next) {
+    var twitterAdapter = twitterAdapterFactory.create(req.session.twitterToken.accessToken, req.session.twitterToken.accessSecret);
 
-    q.resolve([
-            {a: 'b'},
-            {c: 'd'}
-        ])
-        // twitterService.getLastTweets(10)
+    twitterAdapter.getInitialTweets()
         .then(function (initialTweets) {
-            var initialAppState = {
+            return {
                 tweets: initialTweets
             };
-            return initialAppState;
         })
         .then(renderPage)
-        .then(function (html) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(html);
-        })
+        .then(res.send.bind(res));
 };
 
 // A utility function to safely escape JSON for embedding in a <script> tag
@@ -32,7 +25,7 @@ function safeStringify(obj) {
 }
 
 function renderApp(initialAppState) {
-    return ReactDOMServer.renderToString(App({initialAppState: initialAppState}))
+    return ReactDOMServer.renderToString(React.createElement(App, {initialAppState: initialAppState}));
 }
 
 function renderPage(initialAppState) {
