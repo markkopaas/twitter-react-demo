@@ -8,20 +8,22 @@ var twitterAdapterFactory = require('./../lib/twitter-adapter-factory');
 
 module.exports = function (config) {
     return function (req, res, next) {
-        buildInitialAppState(config, req.session.twitterToken.accessToken, req.session.twitterToken.accessSecret)
+        buildInitialAppState(config, req.session)
             .then(renderPage)
-            .then(res.send.bind(res));
+            .then(res.send.bind(res))
+            .catch(next);
     };
 };
 
-function buildInitialAppState(config, accessToken, accessSecret) {
-    var twitterAdapter = twitterAdapterFactory.create(accessToken, accessSecret);
+function buildInitialAppState(config, session) {
+    var twitterAdapter = twitterAdapterFactory.create(session.twitterToken.accessToken, session.twitterToken.accessTokenSecret);
 
     return twitterAdapter.getInitialTweets(config.tweetCountLimit)
         .then(function (initialTweets) {
             return {
                 tweetCountLimit: config.tweetCountLimit,
-                tweets: initialTweets
+                tweets: initialTweets,
+                user: session.user
             };
         })
 }

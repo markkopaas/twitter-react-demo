@@ -11,7 +11,11 @@ function create(config) {
         req.session = {
             twitterToken: {
                 accessToken: 'at',
-                accessSecret: 'as'
+                accessTokenSecret: 'as'
+            },
+            user: {
+                name: 'testname',
+                screen_name: 'testscreername'
             }
         };
 

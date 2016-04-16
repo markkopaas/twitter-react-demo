@@ -19,7 +19,7 @@ describe('GET /', function () {
         sandbox.stub(twitterAdapterFactory, "create", twitterAdapterStub.create);
 
 
-        testApp = testAppFactory.create({cookieEncryptionKey: 'x'});
+        testApp = testAppFactory.create({cookieEncryptionKey: 'x', tweetCountLimit:3});
     });
 
     afterEach(restoreSandbox);
