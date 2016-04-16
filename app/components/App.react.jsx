@@ -5,6 +5,8 @@ var Reflux = require('reflux');
 
 var tweetsStore = require('../stores/tweetsStore');
 
+var TweetList = require('./TweetList.react.jsx')
+
 var App = React.createClass({
     mixins: [Reflux.listenTo(tweetsStore, "onTweetsChange")],
     getInitialState: function () {
@@ -16,7 +18,7 @@ var App = React.createClass({
     render: function () {
         return (
             <div>
-                State is: {JSON.stringify(this.state)}
+                <TweetList tweets={this.state.tweets}/>
             </div>
         );
     }

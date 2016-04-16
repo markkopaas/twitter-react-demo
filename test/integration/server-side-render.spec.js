@@ -28,6 +28,6 @@ describe('GET /', function () {
         return test(testApp)
             .get('/')
             .expect(200)
-            .expect(/data-reactroot/); //test that react has rendered
+            .expect(/Test Tweet Text/);
     })
 });
