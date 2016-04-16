@@ -3,7 +3,9 @@
 var Twitter = require("node-twitter-api");
 var express = require('express');
 
-module.exports = function (config) {
+module.exports = {create: create};
+
+function create (config) {
 
     var twitter = new Twitter({
         consumerKey: config.twitter.consumerKey,
