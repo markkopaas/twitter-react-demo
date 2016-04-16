@@ -6,22 +6,24 @@ var React          = require('react');
 var App                   = require('../app/components/App.react');
 var twitterAdapterFactory = require('./../lib/twitter-adapter-factory');
 
-module.exports = function (req, res, next) {
-    var twitterAdapter = twitterAdapterFactory.create(req.session.twitterToken.accessToken, req.session.twitterToken.accessSecret);
+module.exports = function (config) {
+    return function (req, res, next) {
+        buildInitialAppState(config, req.session.twitterToken.accessToken, req.session.twitterToken.accessSecret)
+            .then(renderPage)
+            .then(res.send.bind(res));
+    };
+};
 
-    twitterAdapter.getInitialTweets()
+function buildInitialAppState(config, accessToken, accessSecret) {
+    var twitterAdapter = twitterAdapterFactory.create(accessToken, accessSecret);
+
+    return twitterAdapter.getInitialTweets(config.tweetCountLimit)
         .then(function (initialTweets) {
             return {
+                tweetCountLimit: config.tweetCountLimit,
                 tweets: initialTweets
             };
         })
-        .then(renderPage)
-        .then(res.send.bind(res));
-};
-
-// A utility function to safely escape JSON for embedding in a <script> tag
-function safeStringify(obj) {
-    return JSON.stringify(obj).replace(/<\/script/g, '<\\/script').replace(/<!--/g, '<\\!--')
 }
 
 function renderApp(initialAppState) {
@@ -35,3 +37,9 @@ function renderPage(initialAppState) {
         '<script src="/js/bundle.js"></script>' +
         '</body>';
 }
+
+// A utility function to safely escape JSON for embedding in a <script> tag
+function safeStringify(obj) {
+    return JSON.stringify(obj).replace(/<\/script/g, '<\\/script').replace(/<!--/g, '<\\!--')
+}
+

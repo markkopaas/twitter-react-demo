@@ -1,11 +1,12 @@
-var express       = require('express');
-var cookieSession = require('cookie-session');
-var authFactory   = require('../lib/auth/auth-factory.js');
+var express          = require('express');
+var cookieSession    = require('cookie-session');
+var authFactory      = require('../lib/auth/auth-factory.js');
+var serverSideRender = require('./server-side-render')
 
 module.exports = {create: create};
 
 function create(config) {
-    var app = express();
+    var app  = express();
     var auth = authFactory.create(config.auth);
 
 // Disable etag headers on responses
@@ -30,14 +31,14 @@ function create(config) {
             res.send('sample api');
         }
     ]);
-    
+
 // Mount server side rendered app
 // Require authentication - if missing, then redirect to login
     app.use('/', [
         auth.onUnauthenticatedRedirectToLogin,
-        require('./server-side-render')
+        serverSideRender({tweetCountLimit: config.tweetCountLimit})
     ]);
-    
+
     return app;
 }
 

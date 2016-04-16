@@ -4,6 +4,7 @@ var Reflux = require('reflux');
 var appActions = require('../actions/appActions')
 
 var tweets = [];
+var tweetsCountLimit = 0;
 
 var tweetsStore = Reflux.createStore({
     init: function () {
@@ -11,6 +12,7 @@ var tweetsStore = Reflux.createStore({
     },
     appInit: function (INITIAL_APP_STATE) {
         tweets = INITIAL_APP_STATE.tweets;
+        tweetsCountLimit = INITIAL_APP_STATE.tweetCountLimit;
         this.trigger(tweets);
     }
 });
