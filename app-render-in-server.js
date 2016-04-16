@@ -6,18 +6,18 @@ var App            = React.createFactory(require('./components/App.react'));
 
 module.exports = function (req, res, next) {
 
-    var props = {
-        tweets: [
-            {a: 'b'},
-            {c: 'd'}
-        ]
-    };
+    var initialAppState = {
+            tweets: [
+                {a: 'b'},
+                {c: 'd'}
+            ]
+        };
 
-    var appMarkup = ReactDOMServer.renderToString(App(props));
+    var appMarkup = ReactDOMServer.renderToString(App({initialAppState: initialAppState}));
 
     var html = '<body>' +
         '<div id="react-app">' + appMarkup + '</div>' +
-        '<script>var APP_PROPS = ' + safeStringify(props) + ';</script>' +
+        '<script>var INITIAL_APP_STATE = ' + safeStringify(initialAppState) + ';</script>' +
         '<script src="/js/bundle.js"></script>' +
         '</body>';
 
