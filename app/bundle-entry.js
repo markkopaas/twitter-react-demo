@@ -13,7 +13,6 @@ appActions.init(window.INITIAL_APP_STATE);
 
 var socket = io();
 
-socket.on('testmessage', function (data) {
-    console.log('got from server', data);
-    socket.emit('messageback', {my: 'data'});
+socket.on('tweet', function (tweet) {
+    console.log('got from server', tweet);
 });

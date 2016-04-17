@@ -1,6 +1,8 @@
 var io     = require('socket.io');
 var cookie = require('cookie');
 
+var twitterAdapterFactory = require('./../lib/twitter-adapter-factory');
+
 module.exports = {create: create};
 
 function create(server) {
@@ -8,17 +10,27 @@ function create(server) {
 }
 
 function onConnection(clientSocket) {
-    var session = extractSession(clientSocket);
+    var session        = extractSession(clientSocket);
+    var twitterAdapter = twitterAdapterFactory.create(session.twitterToken.accessToken, session.twitterToken.accessTokenSecret);
 
-    console.log('tt', session.twitterToken)
-    // create twitter stream
+    twitterAdapter.getUserStream(onData, onEnd);
 
-    clientSocket.emit('testmessage', {hello: 'private world'});
+    function onData(err, tweet) {
+        if (err) {
+            console.log('twitter stream error:', err);
+            return;
+        }
+        clientSocket.emit('tweet', tweet);
+    }
+
+    function onEnd() {
+        twitterAdapter.getUserStream(onData, onEnd);
+    };
 }
 
 function extractSession(clientSocket) {
     var cookies = clientSocket.handshake.headers.cookie;
-    var parsed = cookie.parse(cookies);
+    var parsed  = cookie.parse(cookies);
     var decoded = decode(parsed.session);
 
     return decoded;
