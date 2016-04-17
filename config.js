@@ -3,8 +3,11 @@ var host = 'http://127.0.0.1';
 
 module.exports = {
     port: port,
-    tweetCountLimit: 17,
     cookieEncryptionKey: process.env.COOKIE_ENCRYPTION_KEY,
+    app: {
+        tweetCountLimit: 17,
+        tweetSortOrder: 'userMentionsFirst'
+    },
     twitter: {
         consumerKey: process.env.TWITTER_CONSUMER_KEY,
         consumerSecret: process.env.TWITTER_CONSUMER_SECRET,

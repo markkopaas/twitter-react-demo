@@ -2,12 +2,20 @@ require('./../lib/spec-helper.js');
 
 var test = require('supertest-as-promised');
 
-var testAppFactory        = require('../../express-app/express-app-factory')
+var expressAppFactory     = require('../../express-app/express-app-factory');
 var authFactory           = require('../../lib/auth/auth-factory.js');
 var twitterAdapterFactory = require('../../lib/twitter-adapter-factory');
 
-var authFakeStub       = require('../lib/stubs/auth-fake.stub')
-var twitterAdapterStub = require('../lib/stubs/twitter-adapter-fake.stub')
+var authFakeStub       = require('../lib/stubs/auth-fake.stub');
+var twitterAdapterStub = require('../lib/stubs/twitter-adapter-fake.stub');
+
+var testConfig = {
+    cookieEncryptionKey: 'x',
+    app: {
+        tweetCountLimit: 3,
+        tweetSortOrder: 'default'
+    }
+};
 
 describe('GET /', function () {
     var sandbox        = sinon.sandbox.create();
@@ -18,8 +26,7 @@ describe('GET /', function () {
         sandbox.stub(authFactory, "create", authFakeStub.create);
         sandbox.stub(twitterAdapterFactory, "create", twitterAdapterStub.create);
 
-
-        testApp = testAppFactory.create({cookieEncryptionKey: 'x', tweetCountLimit:3});
+        testApp = expressAppFactory.create(testConfig);
     });
 
     afterEach(restoreSandbox);

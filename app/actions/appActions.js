@@ -3,7 +3,8 @@
 var Reflux = require('reflux');
 
 var appActions = {
-    init: Reflux.createAction()
-}
+    init: Reflux.createAction(),
+    toggleTweetSortOrder: Reflux.createAction()
+};
 
 module.exports = appActions;

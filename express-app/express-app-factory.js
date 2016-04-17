@@ -36,7 +36,7 @@ function create(config) {
 // Require authentication - if missing, then redirect to login
     app.use('/', [
         auth.onUnauthenticatedRedirectToLogin,
-        serverSideRender({tweetCountLimit: config.tweetCountLimit})
+        serverSideRender(config.app)
     ]);
 
     return app;

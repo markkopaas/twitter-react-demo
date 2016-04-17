@@ -3,6 +3,8 @@ require('node-jsx').install({extension: '.jsx'});
 var ReactDOMServer = require('react-dom/server');
 var React          = require('react');
 
+var tweetSortFunctions = require('../lib/tweet-sort-functions');
+
 var App                   = require('../app/components/App.react');
 var twitterAdapterFactory = require('./../lib/twitter-adapter-factory');
 
@@ -16,14 +18,19 @@ module.exports = function (config) {
 };
 
 function buildInitialAppState(config, session) {
-    var twitterAdapter = twitterAdapterFactory.create(session.twitterToken.accessToken, session.twitterToken.accessTokenSecret);
+    var twitterAdapter    = twitterAdapterFactory.create(session.twitterToken.accessToken, session.twitterToken.accessTokenSecret);
+    var tweetSortFunction = tweetSortFunctions.getSortFunction(config.tweetSortOrder, session.user.screen_name);
 
     return twitterAdapter.getInitialTweets(config.tweetCountLimit)
         .then(function (initialTweets) {
+            return initialTweets.sort(tweetSortFunction);
+        })
+        .then(function (initialTweets) {
             return {
-                tweetCountLimit: config.tweetCountLimit,
                 tweets: initialTweets,
-                user: session.user
+                user: session.user,
+                tweetCountLimit: config.tweetCountLimit,
+                tweetSortOrder: config.tweetSortOrder
             };
         })
 }

@@ -11,7 +11,9 @@ var tweetsStore = Reflux.createStore({
     },
     appInit: function (INITIAL_APP_STATE) {
         user = INITIAL_APP_STATE.user;
-        this.trigger(user);
+    },
+    getUser: function () {
+        return user;
     }
 });
 
