@@ -3,7 +3,6 @@ var host = 'http://127.0.0.1';
 
 module.exports = {
     port: port,
-    cookieEncryptionKey: process.env.COOKIE_ENCRYPTION_KEY,
     app: {
         tweetCountLimit: 17,
         tweetSortOrder: 'userMentionsFirst'

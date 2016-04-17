@@ -14,7 +14,8 @@ function create(config) {
     app.disable('x-powered-by');
 
 //because our session data is very limited, we can keep the entire session in an encrypted cookie
-    app.use(cookieSession({secret: config.cookieEncryptionKey}));
+//NB! it is not encrypted, just signed
+    app.use(cookieSession({secret: 'cat'}));
 
 //Mount authentication routes
     app.use(auth.router);
