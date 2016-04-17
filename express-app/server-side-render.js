@@ -19,11 +19,11 @@ module.exports = function (config) {
 
 function buildInitialAppState(config, session) {
     var twitterAdapter    = twitterAdapterFactory.create(session.twitterToken.accessToken, session.twitterToken.accessTokenSecret);
-    var tweetSortFunction = tweetSortFunctions.getSortFunction(config.tweetSortOrder, session.user.screen_name);
+    var tweetSort = tweetSortFunctions.getSortFunction(config.tweetSortOrder, session.user.screen_name);
 
     return twitterAdapter.getInitialTweets(config.tweetCountLimit)
         .then(function (initialTweets) {
-            return initialTweets.sort(tweetSortFunction);
+            return tweetSort(initialTweets);
         })
         .then(function (initialTweets) {
             return {

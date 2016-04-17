@@ -4,7 +4,7 @@ var host = 'http://127.0.0.1';
 module.exports = {
     port: port,
     app: {
-        tweetCountLimit: 17,
+        tweetCountLimit: 7,
         tweetSortOrder: 'userMentionsFirst'
     },
     twitter: {

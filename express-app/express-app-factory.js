@@ -1,7 +1,7 @@
 var express          = require('express');
 var cookieSession    = require('cookie-session');
 var authFactory      = require('../lib/auth/auth-factory.js');
-var serverSideRender = require('./server-side-render')
+var serverSideRender = require('./server-side-render');
 
 module.exports = {create: create};
 
@@ -9,7 +9,6 @@ function create(config) {
     var app  = express();
     var auth = authFactory.create(config.auth);
 
-// Disable etag headers on responses
     app.disable('etag');
     app.disable('x-powered-by');
 
@@ -23,15 +22,6 @@ function create(config) {
 // Mount static content dir. 
 // No authentication, could be potentially in a different server
     app.use("/", express.static(__dirname + "/../public/"));
-
-// Mount API
-// Require authentication - if missing, respond with error
-    app.use('/api', [
-        auth.onUnauthenticatedReturnError,
-        function (req, res, next) {
-            res.send('sample api');
-        }
-    ]);
 
 // Mount server side rendered app
 // Require authentication - if missing, then redirect to login

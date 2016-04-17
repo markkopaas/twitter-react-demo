@@ -9,13 +9,7 @@ var twitterAdapterFactory = require('../../lib/twitter-adapter-factory');
 var authFakeStub       = require('../lib/stubs/auth-fake.stub');
 var twitterAdapterStub = require('../lib/stubs/twitter-adapter-fake.stub');
 
-var testConfig = {
-    cookieEncryptionKey: 'x',
-    app: {
-        tweetCountLimit: 3,
-        tweetSortOrder: 'default'
-    }
-};
+var config = require('../../config');
 
 describe('GET /', function () {
     var sandbox        = sinon.sandbox.create();
@@ -26,7 +20,7 @@ describe('GET /', function () {
         sandbox.stub(authFactory, "create", authFakeStub.create);
         sandbox.stub(twitterAdapterFactory, "create", twitterAdapterStub.create);
 
-        testApp = expressAppFactory.create(testConfig);
+        testApp = expressAppFactory.create(config);
     });
 
     afterEach(restoreSandbox);

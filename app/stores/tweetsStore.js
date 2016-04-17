@@ -13,6 +13,7 @@ var tweetsStore = Reflux.createStore({
     init: function () {
         this.listenTo(appActions.init, this.appInit);
         this.listenTo(appActions.toggleTweetSortOrder, this.toggleTweetSortOrder);
+        this.listenTo(appActions.tweetReceived, this.tweetReceived);
     },
     appInit: function (INITIAL_APP_STATE) {
         tweets           = INITIAL_APP_STATE.tweets;
@@ -24,11 +25,27 @@ var tweetsStore = Reflux.createStore({
 
         tweetSortOrder = tweetSortFunctions.tweetSortOrders[newIndex];
 
-        var sortFunction = tweetSortFunctions.getSortFunction(tweetSortOrder, userStore.getUser().screen_name);
+        sortTweets();
 
-        tweets = tweets.sort(sortFunction);
+        this.trigger(tweets, tweetSortOrder);
+    },
+    tweetReceived: function (tweet) {
+        tweets.push(tweet);
+        sortTweets();
+        limitTweets();
+
         this.trigger(tweets, tweetSortOrder);
     }
 });
+
+function sortTweets () {
+    var tweetSortFunction = tweetSortFunctions.getSortFunction(tweetSortOrder, userStore.getUser().screen_name);
+
+    tweets = tweetSortFunction(tweets);
+}
+
+function limitTweets () {
+    tweets = tweets.slice(0, tweetsCountLimit);
+}
 
 module.exports = tweetsStore;

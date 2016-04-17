@@ -11,8 +11,6 @@ ReactDOM.render(App({initialAppState: window.INITIAL_APP_STATE}), document.getEl
 // Populate the stores from the initial state
 appActions.init(window.INITIAL_APP_STATE);
 
-var socket = io();
-
-socket.on('tweet', function (tweet) {
-    console.log('got from server', tweet);
+io().on('tweet', function (tweet) {
+    appActions.tweetReceived(tweet);
 });
