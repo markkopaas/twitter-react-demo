@@ -1,4 +1,4 @@
-# Twitter react isomorpic live-update demo
+# Twitter react isomorphic live-update demo
 
 The project demonstrates:
 
