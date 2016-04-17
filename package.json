@@ -20,7 +20,8 @@
     "q": "^1.4.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
-    "reflux": "^0.4.1"
+    "reflux": "^0.4.1",
+    "socket.io": "^1.4.5"
   },
   "devDependencies": {
     "browserify": "^13.0.0",

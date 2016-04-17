@@ -10,3 +10,10 @@ ReactDOM.render(App({initialAppState: window.INITIAL_APP_STATE}), document.getEl
 
 // Populate the stores from the initial state
 appActions.init(window.INITIAL_APP_STATE);
+
+var socket = io();
+
+socket.on('testmessage', function (data) {
+    console.log('got from server', data);
+    socket.emit('messageback', {my: 'data'});
+});

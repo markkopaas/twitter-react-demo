@@ -43,6 +43,7 @@ function renderPage(initialAppState) {
     return '<body>' +
         '<div id="react-app">' + renderApp(initialAppState) + '</div>' +
         '<script>var INITIAL_APP_STATE = ' + safeStringify(initialAppState) + ';</script>' +
+        '<script src="/socket.io/socket.io.js"></script>' +
         '<script src="/js/bundle.js"></script>' +
         '</body>';
 }
